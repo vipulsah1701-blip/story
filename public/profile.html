@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== FIXED STORY HEADER ===== */
+    .story-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: linear-gradient(90deg, #020617, #0f172a);
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER (Same as Home) ===== -->
+  <div class="story-header">
+    <h1>User Profile</h1>
+
+    <div>
+      <a href="home.html" class="add-btn">⬅ Back</a>
+      <a href="/auth/logout" class="add-btn">Logout</a>
+    </div>
+  </div>
+
+  <br><br><br>
+  <!-- ===== PROFILE INFO ===== -->
+  <div id="stories">
+
+    <div class="card">
+      <h2 id="username">Loading...</h2>
+      <p id="email"></p>
+    </div>
+
+    <!-- ===== USER STORIES ===== -->
+    <h3 style="max-width:800px;margin:auto;margin-bottom:15px;">
+      User Stories
+    </h3>
+
+    <div id="userStories"></div>
+
+  </div>
+
+  <script src="js/profile.js"></script>
+
+</body>
+</html>

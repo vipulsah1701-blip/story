@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Story Sharing App</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* ===== CENTER LAYOUT ===== */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    /* ===== INSTAGRAM STYLE TITLE ===== */
+    .logo {
+      font-size: 48px;
+      font-weight: bold;
+      background: linear-gradient(45deg, #e11d48, #2563eb, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+
+    /* ===== ABOUT SECTION ===== */
+    .about-box {
+      max-width: 600px;
+      text-align: center;
+      background: #020617;
+      border: 1px solid #1e293b;
+      padding: 20px 25px;
+      border-radius: 14px;
+      margin-bottom: 40px;
+
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .about-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(37,99,235,0.3);
+    }
+
+    .about-box h3 {
+      background: linear-gradient(45deg, #e11d48, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .about-box p {
+      color: #cbd5f5;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ===== CARD CONTAINER ===== */
+    .card-container {
+      display: flex;
+      gap: 30px;
+    }
+
+    /* ===== CARD STYLE ===== */
+    .option-card {
+      width: 220px;
+      padding: 25px;
+      text-align: center;
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .option-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(37,99,235,0.4);
+    }
+
+    .option-card h2 {
+      margin-bottom: 15px;
+    }
+
+    .option-card p {
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #cbd5f5;
+    }
+
+    .option-card a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(90deg, #e11d48, #2563eb);
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .option-card a:hover {
+      transform: scale(1.05);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #020617;
+      border-top: 1px solid #1e293b;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGO -->
+  <div class="logo">InkShare</div>
+
+  <!-- ABOUT SECTION -->
+  <div class="about-box">
+    <h3>✨ Share Your Stories With The World</h3>
+    <p>
+      InkShare is a simple and interactive platform where you can write,
+      explore, and connect through stories. Express your creativity,
+      read amazing content, and engage with a growing community
+      of storytellers.
+    </p>
+  </div>
+
+  <!-- CARDS -->
+  <div class="card-container">
+
+    <!-- LOGIN CARD -->
+    <div class="option-card">
+      <h2>Login</h2>
+      <p>Access your account and explore stories</p>
+      <a href="login.html">Login</a>
+    </div>
+
+    <!-- REGISTER CARD -->
+    <div class="option-card">
+      <h2>Register</h2>
+      <p>Create a new account and start sharing</p>
+      <a href="register.html">Register</a>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Developed by <b>Vipul Sah</b> | Story Sharing Web App © 2026
+  </div>
+
+</body>
+</html>

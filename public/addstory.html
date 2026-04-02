@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Story</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="header">
+  <h1>Add Story</h1>
+  <a class="add-btn" href="home.html">Back</a>
+</div>
+
+<form action="/stories/add" method="post">
+  <h2>Write Your Story</h2>
+
+  <input type="text" name="title" placeholder="Story Title" required>
+
+  <textarea name="content" placeholder="Write your story..." rows="8" required></textarea>
+
+  <button type="submit">Post Story</button>
+</form>
+
+</body>
+</html>

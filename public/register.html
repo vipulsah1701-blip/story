@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 🔴 ERROR MESSAGE -->
+<div id="errorMsg" style="
+  color:red;
+  text-align:center;
+  margin-top:20px;
+  font-weight:bold;
+"></div>
+
+<form action="/auth/register" method="post">
+  <h2>Create Account</h2>
+
+  <input type="text" name="username" placeholder="Username" required>
+
+  <input 
+    type="email" 
+    name="email" 
+    placeholder="Email" 
+    pattern=".+@gmail\.com"
+    title="Only Gmail addresses allowed"
+    required
+  >
+
+  <input type="password" name="password" placeholder="Password" required>
+
+  <button type="submit">Register</button>
+
+  <p style="text-align:center; margin-top:12px;">
+    Already have an account?
+    <a href="login.html">Login</a>
+  </p>
+</form>
+
+<!-- 🧠 SHOW ERROR FROM URL -->
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const error = params.get("error");
+
+  if(error){
+    const el = document.getElementById("errorMsg");
+    el.innerText = error;
+
+    // optional: auto-hide after 3 sec
+    setTimeout(() => {
+      el.innerText = "";
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>

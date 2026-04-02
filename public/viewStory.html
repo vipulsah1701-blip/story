@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Read Story</title>
+  <link rel="stylesheet" href="css/style.css">
+
+<style>
+
+/* ===== FIXED STORY HEADER ===== */
+.story-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: linear-gradient(90deg, #020617, #0f172a);
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+/* ===== TITLE ===== */
+.story-header h2 {
+  color: #e11d48;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ===== HEADER CONTROLS ===== */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== BUTTONS ===== */
+.audio-btn, .back-btn {
+  background: linear-gradient(90deg, #e11d48, #2563eb);
+  color: #020617;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+}
+
+.audio-btn:hover,
+.back-btn:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* ===== SPEED SELECT ===== */
+.speed-select {
+  background: #0f172a;
+  color: white;
+  border: 1px solid #1e293b;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+/* ===== STORY CONTAINER ===== */
+.story-container {
+  max-width: 800px;
+  margin: 100px auto 30px;
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 25px;
+}
+
+/* ===== STORY TEXT ===== */
+.story-text {
+  line-height: 1.9;
+  font-size: 17px;
+  color: #e5e7eb;
+  white-space: pre-line;
+}
+
+.story-text span {
+  transition: background 0.3s ease, color 0.3s ease;
+  padding: 2px 4px;
+  border-radius: 6px;
+}
+
+.highlight {
+  background: rgba(37, 99, 235, 0.35);
+  color: #ffffff;
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="story-header">
+  <h2 id="title">Story Title</h2>
+
+  <div class="header-controls">
+    <button id="readBtn" class="audio-btn">🔊 Read</button>
+    <button id="pauseBtn" class="audio-btn">⏸ Pause</button>
+    <button id="stopBtn" class="audio-btn">⏹ Stop</button>
+
+    <select id="speedControl" class="speed-select">
+      <option value="0.8">0.8x</option>
+      <option value="1" selected>1x</option>
+      <option value="1.2">1.2x</option>
+      <option value="1.5">1.5x</option>
+    </select>
+
+    <!-- Back button now safely stops reading -->
+    <a href="home.html" class="back-btn" onclick="stopReading()">Back</a>
+  </div>
+</div>
+
+<!-- STORY CONTENT -->
+<div class="story-container">
+  <div id="content" class="story-text"></div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const storyId = params.get("id");
+
+  const readBtn = document.getElementById("readBtn");
+  const pauseBtn = document.getElementById("pauseBtn");
+  const stopBtn = document.getElementById("stopBtn");
+  const speedControl = document.getElementById("speedControl");
+  const contentEl = document.getElementById("content");
+
+  let sentences = [];
+  let currentIndex = 0;
+  let isPaused = false;
+  let voices = [];
+
+  // LOAD AVAILABLE VOICES
+  function loadVoices() {
+    voices = speechSynthesis.getVoices();
+  }
+
+  speechSynthesis.onvoiceschanged = loadVoices;
+
+  // LANGUAGE DETECTION (Hindi or English)
+  function detectLanguage(text) {
+    const hindiRegex = /[\u0900-\u097F]/;
+    return hindiRegex.test(text) ? "hi-IN" : "en-US";
+  }
+
+  // GET VOICE BASED ON LANGUAGE
+  function getVoice(lang) {
+    return voices.find(v => v.lang === lang) || voices[0];
+  }
+
+  // FETCH STORY
+  fetch(`/stories/${storyId}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("title").innerText = data.title;
+
+      sentences = data.content
+        .split(/(?<=[.!?])\s+/)
+        .filter(s => s.trim().length > 0);
+
+      contentEl.innerHTML = sentences
+        .map((s, i) => `<span id="sentence-${i}">${s} </span>`)
+        .join("");
+    });
+
+  function removeHighlight() {
+    document.querySelectorAll("#content span").forEach(s => {
+      s.classList.remove("highlight");
+    });
+  }
+
+  function speakSentence(index) {
+
+    if (index >= sentences.length) {
+      removeHighlight();
+      return;
+    }
+
+    currentIndex = index;
+    removeHighlight();
+
+    const currentSpan = document.getElementById(`sentence-${index}`);
+    currentSpan.classList.add("highlight");
+
+    const sentence = sentences[index];
+
+    const utterance = new SpeechSynthesisUtterance(sentence);
+
+    // AUTO LANGUAGE DETECTION
+    const lang = detectLanguage(sentence);
+    utterance.lang = lang;
+
+    // SET VOICE
+    const voice = getVoice(lang);
+    if (voice) utterance.voice = voice;
+
+    utterance.rate = parseFloat(speedControl.value);
+
+    utterance.onend = () => {
+      if (!isPaused) {
+        speakSentence(index + 1);
+      }
+    };
+
+    speechSynthesis.speak(utterance);
+  }
+
+  // READ
+  readBtn.addEventListener("click", () => {
+    speechSynthesis.cancel();
+    isPaused = false;
+    pauseBtn.textContent = "⏸ Pause";
+    speakSentence(0);
+  });
+
+  // PAUSE / RESUME
+  pauseBtn.addEventListener("click", () => {
+
+    if (!speechSynthesis.speaking) return;
+
+    if (!isPaused) {
+      speechSynthesis.pause();
+      pauseBtn.textContent = "▶ Resume";
+      isPaused = true;
+    } else {
+      speechSynthesis.resume();
+      pauseBtn.textContent = "⏸ Pause";
+      isPaused = false;
+    }
+  });
+
+  // STOP
+  stopBtn.addEventListener("click", () => {
+    speechSynthesis.cancel();
+    removeHighlight();
+    currentIndex = 0;
+    isPaused = false;
+    pauseBtn.textContent = "⏸ Pause";
+  });
+
+  // STOP WHEN BACK BUTTON CLICKED
+  function stopReading() {
+    speechSynthesis.cancel();
+  }
+
+  // STOP WHEN PAGE REFRESH / CLOSE
+  window.addEventListener("beforeunload", () => {
+    speechSynthesis.cancel();
+  });
+</script>
+
+</body>
+</html>

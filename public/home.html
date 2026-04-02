@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Story Feed</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* ===== FIXED HEADER ===== */
+    .story-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: linear-gradient(90deg, #020617, #0f172a);
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+    }
+
+    .logout-btn {
+      background: #2563eb;
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: linear-gradient(90deg, #020617, #0f172a);
+      border-top: 1px solid #1e293b;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0 20px;
+    }
+
+    .footer-left {
+      position: absolute;
+      left: 20px;
+    }
+
+    .footer-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .footer-right {
+      position: absolute;
+      right: 20px;
+    }
+
+    .footer .add-btn {
+      padding: 10px 20px;
+      background: #2563eb;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+    }
+
+    #stories {
+      margin-top: 90px;
+      margin-bottom: 90px;
+    }
+
+    /* ===== SEARCH MODAL ===== */
+
+    #searchModal{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.7);
+
+      display:none;
+      align-items:center;
+      justify-content:center;
+
+      z-index:2000;
+    }
+
+    .search-box{
+      width:500px;
+      background:#020617;
+      padding:25px;
+      border-radius:12px;
+      border:1px solid #1e293b;
+    }
+
+    #searchResults{
+      margin-top:15px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="story-header">
+    <h1>Story Feed</h1>
+    <a class="logout-btn" href="/auth/logout">Logout</a>
+  </div>
+
+  <!-- STORIES -->
+  <div id="stories"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+
+    <div class="footer-left">
+      <a class="add-btn" id="searchBtn">🔍 Search</a>
+    </div>
+
+    <div class="footer-center">
+      <a class="add-btn" href="addStory.html">+ Add Story</a>
+    </div>
+
+    <div class="footer-right">
+      <a class="add-btn" href="profileDashboard.html">👤 Profile</a>
+    </div>
+
+  </div>
+
+  <!-- SEARCH WINDOW -->
+  <div id="searchModal">
+
+    <div class="search-box">
+
+      <h2>Search Stories</h2>
+
+      <input 
+        type="text"
+        id="searchInput"
+        placeholder="Search story or author..."
+      >
+
+      <div id="searchResults"></div>
+
+      <br>
+      <button id="closeSearch">Close</button>
+
+    </div>
+
+  </div>
+
+  <script src="js/home.js"></script>
+  <script src="js/assistant.js"></script>
+</body>
+</html>
