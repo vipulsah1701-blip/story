@@ -96,7 +96,7 @@ router.get("/all", (req, res) => {
 /*
    GET SINGLE STORY WITH USER INFO
 */
-router.get("//:id", (req, res) => {
+router.get("/:id", (req, res) => {
 
   const storyId = req.params.id;
 
