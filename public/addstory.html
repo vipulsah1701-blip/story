@@ -11,15 +11,47 @@
   <a class="add-btn" href="home.html">Back</a>
 </div>
 
-<form action="/stories/add" method="post">
+<form id="storyForm">
   <h2>Write Your Story</h2>
 
-  <input type="text" name="title" placeholder="Story Title" required>
-
-  <textarea name="content" placeholder="Write your story..." rows="8" required></textarea>
+  <input type="text" id="title" placeholder="Story Title" required>
+  <textarea id="content" placeholder="Write your story..." rows="8" required></textarea>
 
   <button type="submit">Post Story</button>
 </form>
+
+<script>
+const BASE_URL = "https://story-9mch.onrender.com";
+
+document.getElementById("storyForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const title = document.getElementById("title").value;
+  const content = document.getElementById("content").value;
+
+  fetch(`${BASE_URL}/stories/add`, {
+    method: "POST",
+    credentials: "include", // 🔥 REQUIRED for session
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ title, content })
+  })
+  .then(res => {
+    if(res.redirected){
+      window.location.href = res.url;
+    } else if(res.status === 401){
+      alert("Please login first");
+    } else {
+      window.location.href = "home.html";
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    alert("Error posting story");
+  });
+});
+</script>
 
 </body>
 </html>
