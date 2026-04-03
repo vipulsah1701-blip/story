@@ -15,27 +15,30 @@ const authRoutes = require("./routes/auth");
 // Middleware
 // =====================
 
-// ✅ CORS (allow frontend to talk to backend)
+// ✅ CORS (IMPORTANT FIX)
 app.use(cors({
-  origin: true,
+  origin: "https://story-9mch.onrender.com", // 👈 your frontend URL
   credentials: true
 }));
+
+// ✅ Health check (for Render)
 app.get("/health", (req, res) => {
   res.send("OK");
 });
+
 // Parse JSON & form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Session Middleware
+// ✅ Session Middleware (IMPROVED)
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || "fallback_secret",
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true, // ✅ REQUIRED for production (Render uses HTTPS)
-    sameSite: "none", // ✅ REQUIRED for cross-site cookies
+    secure: true,        // required for HTTPS (Render)
+    sameSite: "none",    // required for cross-origin
     maxAge: 1000 * 60 * 60
   }
 }));
