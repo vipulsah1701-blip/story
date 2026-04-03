@@ -112,7 +112,7 @@
   <!-- HEADER -->
   <div class="story-header">
     <h1>Story Feed</h1>
-    <a class="logout-btn" href="https://story-9mch.onrender.com/auth/logout">Logout</a>
+    <a class="logout-btn" href="#" onclick="logout()">Logout</a>
   </div>
 
   <!-- STORIES -->
@@ -159,5 +159,14 @@
 
   <script src="js/home.js"></script>
   <script src="js/assistant.js"></script>
+  <script>
+function logout(){
+  fetch("https://story-9mch.onrender.com/auth/logout", {
+    credentials: "include"
+  }).then(() => {
+    window.location.href = "index.html";
+  });
+}
+</script>
 </body>
 </html>
