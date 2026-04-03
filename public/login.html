@@ -6,7 +6,6 @@
 </head>
 <body>
 
-<!-- 🔴 ERROR MESSAGE -->
 <div id="errorMsg" style="
   color:red;
   text-align:center;
@@ -39,25 +38,28 @@ document.getElementById("loginForm").addEventListener("submit", function(e){
 
   fetch(`${BASE_URL}/auth/login`, {
     method: "POST",
-    credentials: "include", // 🔥 REQUIRED
+    credentials: "include",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ email, password })
   })
-  .then(res => {
-    if(res.redirected){
-      window.location.href = "home.html";
-    } else {
-      return res.text().then(msg => {
-        document.getElementById("errorMsg").innerText = msg;
-      });
+  .then(res => res.json())
+  .then(data => {
+
+    if(!data.success){
+      document.getElementById("errorMsg").innerText = data.message;
+      return;
     }
+
+    // ✅ success
+    window.location.href = "home.html";
   })
   .catch(() => {
     document.getElementById("errorMsg").innerText = "Login failed";
   });
 });
 </script>
+
 </body>
 </html>
