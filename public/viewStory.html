@@ -113,7 +113,6 @@
       <option value="1.5">1.5x</option>
     </select>
 
-    <!-- Back button now safely stops reading -->
     <a href="home.html" class="back-btn" onclick="stopReading()">Back</a>
   </div>
 </div>
@@ -124,6 +123,8 @@
 </div>
 
 <script>
+  const BASE_URL = "https://story-9mch.onrender.com";
+
   const params = new URLSearchParams(window.location.search);
   const storyId = params.get("id");
 
@@ -138,28 +139,28 @@
   let isPaused = false;
   let voices = [];
 
-  // LOAD AVAILABLE VOICES
+  // LOAD VOICES
   function loadVoices() {
     voices = speechSynthesis.getVoices();
   }
-
   speechSynthesis.onvoiceschanged = loadVoices;
 
-  // LANGUAGE DETECTION (Hindi or English)
+  // LANGUAGE DETECTION
   function detectLanguage(text) {
     const hindiRegex = /[\u0900-\u097F]/;
     return hindiRegex.test(text) ? "hi-IN" : "en-US";
   }
 
-  // GET VOICE BASED ON LANGUAGE
+  // GET VOICE
   function getVoice(lang) {
     return voices.find(v => v.lang === lang) || voices[0];
   }
 
-  // FETCH STORY
-  fetch(`/stories/${storyId}`)
+  // 🔥 FETCH STORY (FIXED)
+  fetch(`${BASE_URL}/stories/${storyId}`)
     .then(res => res.json())
     .then(data => {
+
       document.getElementById("title").innerText = data.title;
 
       sentences = data.content
@@ -194,11 +195,9 @@
 
     const utterance = new SpeechSynthesisUtterance(sentence);
 
-    // AUTO LANGUAGE DETECTION
     const lang = detectLanguage(sentence);
     utterance.lang = lang;
 
-    // SET VOICE
     const voice = getVoice(lang);
     if (voice) utterance.voice = voice;
 
@@ -246,12 +245,10 @@
     pauseBtn.textContent = "⏸ Pause";
   });
 
-  // STOP WHEN BACK BUTTON CLICKED
   function stopReading() {
     speechSynthesis.cancel();
   }
 
-  // STOP WHEN PAGE REFRESH / CLOSE
   window.addEventListener("beforeunload", () => {
     speechSynthesis.cancel();
   });
