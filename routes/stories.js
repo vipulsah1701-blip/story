@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/add", (req, res) => {
 
   if (!req.session.user) {
-    return res.status(401).send("Please login first");
+    return res.status(401).json({ success: false, message: "Please login first" });
   }
 
   const { title, content } = req.body;
@@ -21,10 +21,12 @@ router.post("/add", (req, res) => {
 
       if (err) {
         console.log(err);
-        return res.status(500).send("Database error");
+        return res.status(500).json({ success: false, message: "Database error" });
       }
 
-      res.redirect("/home.html");
+      // ✅ RETURN JSON INSTEAD OF REDIRECT
+      res.json({ success: true });
+
     }
   );
 });
