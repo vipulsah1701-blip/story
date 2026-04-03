@@ -1,6 +1,6 @@
 const express = require("express");
 const db = require("../db");
-const bcrypt = require("bcrypt"); // 🔐 ADD THIS
+const bcrypt = require("bcrypt");
 const router = express.Router();
 
 /*
@@ -9,18 +9,15 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
-  // 🔴 Check empty fields
   if (!username || !email || !password) {
-    return res.redirect("/register.html?error=All fields are required");
+    return res.json({ success: false, message: "All fields are required" });
   }
 
-  // 🔴 Gmail validation
   if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
-    return res.redirect("/register.html?error=Only Gmail addresses allowed");
+    return res.json({ success: false, message: "Only Gmail addresses allowed" });
   }
 
   try {
-    // 🔐 HASH PASSWORD
     const hashedPassword = await bcrypt.hash(password, 10);
 
     db.query(
@@ -30,15 +27,13 @@ router.post("/register", async (req, res) => {
 
         if (err) {
           console.log(err);
-          return res.redirect("/register.html?error=Database error");
+          return res.json({ success: false, message: "Database error" });
         }
 
-        // 🔴 Email exists
         if (result.length > 0) {
-          return res.redirect("/register.html?error=Email already registered");
+          return res.json({ success: false, message: "Email already registered" });
         }
 
-        // ✅ Insert user with HASHED password
         db.query(
           "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
           [username, email, hashedPassword],
@@ -46,10 +41,10 @@ router.post("/register", async (req, res) => {
 
             if (err) {
               console.log(err);
-              return res.redirect("/register.html?error=Registration failed");
+              return res.json({ success: false, message: "Registration failed" });
             }
 
-            res.redirect("/login.html");
+            res.json({ success: true });
           }
         );
       }
@@ -57,20 +52,19 @@ router.post("/register", async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    return res.redirect("/register.html?error=Server error");
+    res.json({ success: false, message: "Server error" });
   }
 });
 
 
 /*
-   LOGIN USER (SESSION BASED)
+   LOGIN USER
 */
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  // 🔴 Check empty fields
   if (!email || !password) {
-    return res.redirect("/login.html?error=All fields are required");
+    return res.json({ success: false, message: "All fields are required" });
   }
 
   db.query(
@@ -80,34 +74,35 @@ router.post("/login", (req, res) => {
 
       if (err) {
         console.log(err);
-        return res.redirect("/login.html?error=Database error");
+        return res.json({ success: false, message: "Database error" });
       }
 
       if (result.length === 0) {
-        return res.redirect("/login.html?error=Invalid email or password");
+        return res.json({ success: false, message: "Invalid email or password" });
       }
 
       const user = result[0];
 
       try {
-        // 🔐 COMPARE HASHED PASSWORD
         const match = await bcrypt.compare(password, user.password);
 
         if (!match) {
-          return res.redirect("/login.html?error=Invalid email or password");
+          return res.json({ success: false, message: "Invalid email or password" });
         }
 
-        // ✅ LOGIN SUCCESS
         req.session.user = {
           id: user.id,
           username: user.username
         };
 
-        res.redirect("/home.html");
+        // 🔥 IMPORTANT FIX
+        req.session.save(() => {
+          res.json({ success: true });
+        });
 
       } catch (err) {
         console.log(err);
-        return res.redirect("/login.html?error=Server error");
+        res.json({ success: false, message: "Server error" });
       }
     }
   );
@@ -119,7 +114,7 @@ router.post("/login", (req, res) => {
 */
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {
-    res.redirect("/index.html");
+    res.json({ success: true });
   });
 });
 
