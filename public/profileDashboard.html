@@ -3,41 +3,44 @@
 <head>
   <title>My Profile</title>
   <link rel="stylesheet" href="css/style.css">
+
   <style>
     /* ===== MODAL ===== */
-#deleteModal{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.7);
+    #deleteModal{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.7);
 
-  display:none; /* hidden by default */
-  align-items:center;
-  justify-content:center;
+      display:none;
+      align-items:center;
+      justify-content:center;
 
-  z-index:9999;
-}
+      z-index:9999;
+    }
 
-#deleteModal.active{
-  display:flex;
-}
+    /* SHOW MODAL */
+    #deleteModal.active{
+      display:flex;
+    }
 
-.modal-box{
-  width:300px;
-  background:#020617;
-  padding:20px;
-  border-radius:10px;
-  text-align:center;
-}
+    .modal-box{
+      width:300px;
+      background:#020617;
+      padding:20px;
+      border-radius:10px;
+      text-align:center;
+    }
 
-.modal-box button{
-  width:100%;
-  margin-top:10px;
-}
+    .modal-box button{
+      width:100%;
+      margin-top:10px;
+    }
   </style>
 </head>
+
 <body>
 
 <!-- ===== HEADER ===== -->
@@ -49,15 +52,14 @@
   </div>
 </div>
 
-<!-- ===== USER INFO ===== -->
+<!-- ===== USER INFO -->
 <div id="userInfo" style="max-width:800px;margin:120px auto 20px auto;"></div>
 
-<!-- ===== USER STORIES ===== -->
+<!-- ===== USER STORIES -->
 <div id="myStories" style="max-width:800px;margin:auto;"></div>
 
-
-<!-- DELETE MODAL -->
-<div id="deleteModal" class="modal-hidden">
+<!-- ===== DELETE MODAL -->
+<div id="deleteModal">
   <div class="modal-box">
     <h3>Delete Story</h3>
     <p>This action cannot be undone.</p>
@@ -67,7 +69,7 @@
   </div>
 </div>
 
-
+<!-- JS -->
 <script src="js/profileDashboard.js"></script>
 
 </body>
