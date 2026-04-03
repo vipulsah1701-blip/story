@@ -2,6 +2,11 @@ const express = require("express");
 const db = require("../db");
 const router = express.Router();
 
+router.post("/add-test", (req, res) => {
+  console.log("🔥 NEW ROUTE WORKING");
+  res.json({ success: true });
+});
+
 /*
    ADD STORY (SESSION BASED)
 */
