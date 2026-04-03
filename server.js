@@ -17,7 +17,7 @@ const authRoutes = require("./routes/auth");
 
 // ✅ CORS (IMPORTANT FIX)
 app.use(cors({
-  origin: "https://story-9mch.onrender.com", // 👈 your frontend URL
+  origin: "https://inkshare.onrender.com", // 👈 your frontend URL
   credentials: true
 }));
 
