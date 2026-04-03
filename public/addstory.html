@@ -31,7 +31,7 @@ document.getElementById("storyForm").addEventListener("submit", function(e){
   const title = document.getElementById("title").value;
   const content = document.getElementById("content").value;
 
-  fetch(`${BASE_URL}/stories/add`, {
+  fetch("https://story-9mch.onrender.com/stories/add-test", {
     method: "POST",
     credentials: "include", // 🔥 VERY IMPORTANT
     headers: {
