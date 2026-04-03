@@ -20,7 +20,9 @@ app.use(cors({
   origin: true,
   credentials: true
 }));
-
+app.get("/health", (req, res) => {
+  res.send("OK");
+});
 // Parse JSON & form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
