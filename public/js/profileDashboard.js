@@ -1,5 +1,10 @@
 const BASE_URL = "https://story-9mch.onrender.com";
 
+let deleteId = null;
+
+// ==========================
+// LOAD USER DATA
+// ==========================
 fetch(`${BASE_URL}/user/me`, {
   credentials: "include"
 })
@@ -35,16 +40,47 @@ fetch(`${BASE_URL}/user/me`, {
       <div class="card">
         <h3>${s.title}</h3>
         <p>${s.content.substring(0,150)}...</p>
-        <button onclick="deleteStory(${s.id})">Delete Story</button>
+        <button onclick="openDeleteModal(${s.id})">
+          Delete Story
+        </button>
       </div>
     `;
   });
 
 });
 
-function deleteStory(id) {
-  fetch(`${BASE_URL}/stories/${id}`, {
-    method: "DELETE",
-    credentials: "include"
-  }).then(() => location.reload());
+// ==========================
+// OPEN MODAL
+// ==========================
+function openDeleteModal(id) {
+  deleteId = id;
+  document.getElementById("deleteModal").classList.add("active");
 }
+
+// ==========================
+// MODAL EVENTS
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+
+  const confirmBtn = document.getElementById("confirmDelete");
+  const cancelBtn = document.getElementById("cancelDelete");
+  const modal = document.getElementById("deleteModal");
+
+  // CONFIRM DELETE
+  confirmBtn.onclick = function(){
+    fetch(`${BASE_URL}/stories/${deleteId}`, {
+      method: "DELETE",
+      credentials: "include"
+    })
+    .then(() => {
+      location.reload();
+    });
+  };
+
+  // CANCEL
+  cancelBtn.onclick = function(){
+    modal.classList.remove("active");
+    deleteId = null;
+  };
+
+});
