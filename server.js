@@ -1,9 +1,10 @@
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
+const cors = require("cors");
 
 const app = express();
-require("./db"); // Database connection
+require("./db"); // Railway DB connection
 
 // Routes
 const storyRoutes = require("./routes/stories");
@@ -14,22 +15,30 @@ const authRoutes = require("./routes/auth");
 // Middleware
 // =====================
 
+// ✅ CORS (allow frontend to talk to backend)
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
+
 // Parse JSON & form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Session Middleware (MUST be before routes)
+// ✅ Session Middleware
 app.use(session({
-  secret: "supersecretkey",   // change to strong random string
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    maxAge: 1000 * 60 * 60   // 1 hour
+    secure: true, // ✅ REQUIRED for production (Render uses HTTPS)
+    sameSite: "none", // ✅ REQUIRED for cross-site cookies
+    maxAge: 1000 * 60 * 60
   }
 }));
 
-// Serve static files (HTML, CSS, JS)
+// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
 // =====================
@@ -54,7 +63,8 @@ app.use((req, res) => {
 // Start Server
 // =====================
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
