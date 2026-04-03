@@ -6,7 +6,6 @@
 </head>
 <body>
 
-<!-- 🔴 ERROR MESSAGE -->
 <div id="errorMsg" style="
   color:red;
   text-align:center;
@@ -54,14 +53,16 @@ document.getElementById("registerForm").addEventListener("submit", function(e){
     },
     body: JSON.stringify({ username, email, password })
   })
-  .then(res => {
-    if(res.redirected){
-      window.location.href = "login.html";
-    } else {
-      return res.text().then(msg => {
-        document.getElementById("errorMsg").innerText = msg;
-      });
+  .then(res => res.json())
+  .then(data => {
+
+    if(!data.success){
+      document.getElementById("errorMsg").innerText = data.message;
+      return;
     }
+
+    // ✅ success
+    window.location.href = "login.html";
   })
   .catch(() => {
     document.getElementById("errorMsg").innerText = "Registration failed";
