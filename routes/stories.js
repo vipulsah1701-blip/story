@@ -2,11 +2,6 @@ const express = require("express");
 const db = require("../db");
 const router = express.Router();
 
-router.post("/add-test", (req, res) => {
-  console.log("🔥 NEW ROUTE WORKING");
-  res.json({ success: true });
-});
-
 /*
    ADD STORY (SESSION BASED)
 */
@@ -101,7 +96,7 @@ router.get("/all", (req, res) => {
 /*
    GET SINGLE STORY WITH USER INFO
 */
-router.get("/:id", (req, res) => {
+router.get("//:id", (req, res) => {
 
   const storyId = req.params.id;
 
