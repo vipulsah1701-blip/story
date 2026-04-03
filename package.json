@@ -10,3 +10,6 @@
     "mysql2": "^3.6.0"
   }
 }
+"scripts": {
+  "start": "node server.js"
+}
